@@ -35,11 +35,7 @@ do
             ListaDeProductos = JsonSerializer.Deserialize<List<Producto>>(jsonString);
             foreach (var item in ListaDeProductos)
             {
-                System.Console.WriteLine("---------------PRODUCTO " + item.Nombre + " ---------------");
-                System.Console.WriteLine("Precio: " + item.Precio);
-                System.Console.WriteLine("Tamaño: " + item.Tamanio);
-                System.Console.WriteLine("Fecha de vencimiento: " + item.Fechavencimiento.ToShortDateString());
-                System.Console.WriteLine("------------------------------");
+                MostrarProducto(item);
             }
             break;
         case 3:
@@ -72,8 +68,12 @@ do
             System.Console.WriteLine("Ingrese el precio del producto: ");
             auxF = System.Console.ReadLine();
             precio = Convert.ToInt64(auxF);
-            LeerArchivo(ListaDeProductos);
-            ListaDeProductos.Add(new Producto(nombre, tamanio, FvAux, precio));
+            jsonString = File.ReadAllText("Productos.Json");
+            ListaDeProductos = JsonSerializer.Deserialize<List<Producto>>(jsonString);
+            var auxP = new Producto(nombre, tamanio, FvAux, precio);
+            ListaDeProductos.Add(auxP);
+            System.Console.WriteLine(("----------------EL PRODUCTO FUE CREADO CON EXITO----------------"));
+            MostrarProducto(auxP);
             File.WriteAllText("Productos.Json", JsonSerializer.Serialize(ListaDeProductos));
             System.Console.WriteLine("Todos los productos fueron guardados en el archivo JSON con exito...");
             break;
@@ -83,8 +83,18 @@ do
 } while (opcion != 4);
 
 
-static void LeerArchivo(List<Producto> ListaParaGuardar)
+
+
+
+
+
+
+
+static void MostrarProducto(Producto item)
 {
-    string jsonString = File.ReadAllText("Productos.Json");
-    ListaParaGuardar = JsonSerializer.Deserialize<List<Producto>>(jsonString);
+    System.Console.WriteLine("---------------PRODUCTO " + item.Nombre + " ---------------");
+    System.Console.WriteLine("Precio: " + item.Precio);
+    System.Console.WriteLine("Tamaño: " + item.Tamanio);
+    System.Console.WriteLine("Fecha de vencimiento: " + item.Fechavencimiento.ToShortDateString());
+    System.Console.WriteLine("------------------------------");
 }
